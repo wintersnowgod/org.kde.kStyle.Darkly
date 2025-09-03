@@ -1,0 +1,114 @@
+name: Build and Release Flatpak
+
+on:
+  push:
+    tags:
+      - '*'  # Also trigger on tag pushes (e.g., v1.0.0)
+  release:
+    types: [created]  # Trigger on manual release creation
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Needed to get full git history for changelog
+
+    - name: Install Flatpak and dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y flatpak flatpak-builder
+        flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+    - name: Build Flatpak
+      run: |
+       flatpak-builder --install-deps-from=flathub --repo=local --force-clean .build-dir org.kde.KStyle.Darkly5.15-24.08.json
+       flatpak build-bundle local/ org.kde.kStyle.Darkly.5.15-24.08.flatpak runtime/org.kde.KStyle.Darkly/x86_64/5.15-24.08
+       flatpak-builder --install-deps-from=flathub --repo=local --force-clean .build-dir org.kde.KStyle.Darkly6.8.json
+       flatpak build-bundle local/ org.kde.kStyle.Darkly6.8.flatpak runtime/org.kde.KStyle.Darkly/x86_64/6.8
+       flatpak-builder --install-deps-from=flathub --repo=local --force-clean .build-dir org.kde.KStyle.Darkly6.9.json
+       flatpak build-bundle local/ org.kde.kStyle.Darkly6.9.flatpak runtime/org.kde.KStyle.Darkly/x86_64/6.9
+
+    - name: Upload Darkly 5.15-24.08 bundle
+      uses: actions/upload-artifact@v4
+      with:
+        name: darkly-5.15-24.08
+        path: org.kde.kStyle.Darkly5.15-24.08.flatpak
+
+    - name: Upload Darkly 6.8 bundle
+      uses: actions/upload-artifact@v4
+      with:
+        name: darkly-6.8
+        path: org.kde.kStyle.Darkly6.8.flatpak
+
+    - name: Upload Darkly 6.9 bundle
+      uses: actions/upload-artifact@v4
+      with:
+        name: darkly-6.9
+        path: org.kde.kStyle.Darkly6.9.flatpak
+
+  release:
+    needs: build
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') || github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Needed to get full git history for changelog
+
+    - name: Generate changelog
+      id: changelog
+      run: |
+        # Get all tags sorted by date
+        TAGS=$(git tag --sort=-creatordate)
+        # Get current tag
+        CURR_TAG=$(git describe --tags)
+        
+        # Check if this is the first tag
+        if [ $(echo "$TAGS" | wc -l) -eq 1 ]; then
+          LOG=$(git log --reverse --pretty=format:"- %s (%h)")
+        else
+          PREV_TAG=$(echo "$TAGS" | sed -n 2p)
+          LOG=$(git log "$PREV_TAG..$CURR_TAG" --reverse --pretty=format:"- %s (%h)")
+        fi
+        
+        # Output the changelog
+        echo "LOG<<EOF" >> $GITHUB_OUTPUT
+        echo "$LOG" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Download Darkly 5.15 bundle
+      uses: actions/download-artifact@v4
+      with:
+        name: darkly-5.15-24.08
+        path: .
+
+    - name: Download Darkly 6.8 bundle
+      uses: actions/download-artifact@v4
+      with:
+        name: darkly-6.8
+        path: .
+
+    - name: Download Darkly 6.9 bundle
+      uses: actions/download-artifact@v4
+      with:
+        name: darkly-6.9
+        path: .
+
+    - name: Create or Update Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          org.kde.kStyle.Darkly5.15-24.08.flatpak
+          org.kde.kStyle.Darkly6.8.flatpak
+          org.kde.kStyle.Darkly6.9.flatpak
+        tag_name: ${{ github.ref_name }}
+        name: Release ${{ github.ref_name }}
+        body: |
+          Changes since last release:
+          ${{ steps.changelog.outputs.LOG }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
