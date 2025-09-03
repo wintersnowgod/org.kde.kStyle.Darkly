@@ -24,12 +24,15 @@ jobs:
 
     - name: Build Flatpak
       run: |
-       flatpak-builder --install-deps-from=flathub --repo=local --force-clean .build-dir org.kde.KStyle.Darkly5.15-24.08.json --user
-       flatpak build-bundle local/ org.kde.kStyle.Darkly.5.15-24.08.flatpak runtime/org.kde.KStyle.Darkly/x86_64/5.15-24.08
-       flatpak-builder --install-deps-from=flathub --repo=local --force-clean .build-dir org.kde.KStyle.Darkly6.8.json --user
-       flatpak build-bundle local/ org.kde.kStyle.Darkly6.8.flatpak runtime/org.kde.KStyle.Darkly/x86_64/6.8
-       flatpak-builder --install-deps-from=flathub --repo=local --force-clean .build-dir org.kde.KStyle.Darkly6.9.json --user
-       flatpak build-bundle local/ org.kde.kStyle.Darkly6.9.flatpak runtime/org.kde.KStyle.Darkly/x86_64/6.9
+       flatpak-builder --install-deps-from=flathub --repo=local-5.15-24.08 --force-clean .build-dir-5.15-24.08 org.kde.KStyle.Darkly5.15-24.08.json --user
+       flatpak-builder --install-deps-from=flathub --repo=local-6.8 --force-clean .build-dir-6.8 org.kde.KStyle.Darkly6.8.json --user
+       flatpak-builder --install-deps-from=flathub --repo=local-6.9 --force-clean .build-dir-6.9 org.kde.KStyle.Darkly6.9.json --user
+
+    - name: Build Flatpak Bundles
+      run : |
+       flatpak build-bundle local-5.15-24.08/ org.kde.kStyle.Darkly.5.15-24.08.flatpak runtime/org.kde.KStyle.Darkly/x86_64/5.15-24.08
+       flatpak build-bundle local-6.8/ org.kde.kStyle.Darkly6.8.flatpak runtime/org.kde.KStyle.Darkly/x86_64/6.8
+       flatpak build-bundle local-6.9/ org.kde.kStyle.Darkly6.9.flatpak runtime/org.kde.KStyle.Darkly/x86_64/6.9
 
     - name: Upload Darkly 5.15-24.08 bundle
       uses: actions/upload-artifact@v4
