@@ -30,7 +30,7 @@ jobs:
 
     - name: Build Flatpak Bundles
       run : |
-       flatpak build-bundle local-5.15-24.08/ org.kde.kStyle.Darkly.5.15-24.08.flatpak runtime/org.kde.KStyle.Darkly/x86_64/5.15-24.08
+       flatpak build-bundle local-5.15-24.08/ org.kde.kStyle.Darkly5.15-24.08.flatpak runtime/org.kde.KStyle.Darkly/x86_64/5.15-24.08
        flatpak build-bundle local-6.8/ org.kde.kStyle.Darkly6.8.flatpak runtime/org.kde.KStyle.Darkly/x86_64/6.8
        flatpak build-bundle local-6.9/ org.kde.kStyle.Darkly6.9.flatpak runtime/org.kde.KStyle.Darkly/x86_64/6.9
 
