@@ -41,8 +41,8 @@ If you install flatpaks pkgs with `--user` then do the one for user flatpaks oth
 
 - If you want to request any other version of the runtime then you can open the issue for it!!
 
-## Build Instructions
-# System flatpak
+# Build Instructions
+## System flatpak
 runtime 5.15-24.08
 ```
 flatpak-builder --install-deps-from=flathub --repo=local-5.15-24.08 --force-clean .build-dir-5.15-24.08 org.kde.KStyle.Darkly5.15-24.08.json
@@ -58,7 +58,7 @@ runtime 6.9
 flatpak-builder --install-deps-from=flathub --repo=local-6.9 --force-clean .build-dir-6.9 org.kde.KStyle.Darkly6.9.json
 flatpak build-bundle local-6.9/ org.kde.kStyle.Darkly6.9.flatpak runtime/org.kde.KStyle.Darkly/x86_64/6.9
 ```
-# User flatpak
+## User flatpak
 runtime 5.15-24.08
 ```
 flatpak-builder --install-deps-from=flathub --repo=local-5.15-24.08 --force-clean .build-dir-5.15-24.08 org.kde.KStyle.Darkly5.15-24.08.json --user
