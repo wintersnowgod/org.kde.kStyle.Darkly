@@ -21,5 +21,7 @@ jobs:
     - name: Build Flatpak
       run: |
        flatpak-builder --install-deps-from=flathub --repo=local-5.15-24.08 --force-clean .build-dir-5.15-24.08 org.kde.KStyle.Darkly5.15-24.08.json --user
+       flatpak-builder --install-deps-from=flathub --repo=local-6.9 --force-clean .build-dir-6.9 org.kde.KStyle.Darkly6.7.json --user
        flatpak-builder --install-deps-from=flathub --repo=local-6.8 --force-clean .build-dir-6.8 org.kde.KStyle.Darkly6.8.json --user
        flatpak-builder --install-deps-from=flathub --repo=local-6.9 --force-clean .build-dir-6.9 org.kde.KStyle.Darkly6.9.json --user
+       flatpak-builder --install-deps-from=flathub --repo=local-6.9 --force-clean .build-dir-6.9 org.kde.KStyle.Darkly6.10.json --user
