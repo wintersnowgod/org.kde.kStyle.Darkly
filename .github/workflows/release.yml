@@ -26,10 +26,6 @@ jobs:
       run: |
        flatpak-builder --install-deps-from=flathub --repo=local-5.15-24.08 --force-clean .build-dir-5.15-24.08 org.kde.KStyle.Darkly5.15-24.08.json --user
 
-    - name: Build Flatpak Darkly6.7
-      run: |
-       flatpak-builder --install-deps-from=flathub --repo=local-6.7 --force-clean .build-dir-6.7 org.kde.KStyle.Darkly6.7.json --user
-
     - name: Build Flatpak Darkly6.8
       run: |
        flatpak-builder --install-deps-from=flathub --repo=local-6.8 --force-clean .build-dir-6.8 org.kde.KStyle.Darkly6.8.json --user
@@ -45,10 +41,6 @@ jobs:
     - name: Build Flatpak Bundle org.kde.KStyle.Darkly/x86_64/5.15-24.08
       run : |
        flatpak build-bundle local-5.15-24.08/ org.kde.kStyle.Darkly5.15-24.08.flatpak runtime/org.kde.KStyle.Darkly/x86_64/5.15-24.08
-
-    - name: Build Flatpak Bundle org.kde.KStyle.Darkly/x86_64/6.7
-      run : |
-       flatpak build-bundle local-6.7/ org.kde.kStyle.Darkly6.7.flatpak runtime/org.kde.KStyle.Darkly/x86_64/6.7
 
     - name: Build Flatpak Bundle org.kde.KStyle.Darkly/x86_64/6.8
       run : |
@@ -131,12 +123,6 @@ jobs:
         name: darkly-5.15-24.08
         path: .
 
-    - name: Download Darkly 6.7 bundle
-      uses: actions/download-artifact@v4
-      with:
-        name: darkly-6.7
-        path: .
-
     - name: Download Darkly 6.8 bundle
       uses: actions/download-artifact@v4
       with:
@@ -160,7 +146,6 @@ jobs:
       with:
         files: |
           org.kde.kStyle.Darkly5.15-24.08.flatpak
-          org.kde.kStyle.Darkly6.7.flatpak
           org.kde.kStyle.Darkly6.8.flatpak
           org.kde.kStyle.Darkly6.9.flatpak
           org.kde.kStyle.Darkly6.10.flatpak
