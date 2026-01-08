@@ -60,12 +60,6 @@ jobs:
         name: darkly-5.15-24.08
         path: org.kde.kStyle.Darkly5.15-24.08.flatpak
 
-    - name: Upload Darkly 6.7 bundle
-      uses: actions/upload-artifact@v4
-      with:
-        name: darkly-6.7
-        path: org.kde.kStyle.Darkly6.7.flatpak
-
     - name: Upload Darkly 6.8 bundle
       uses: actions/upload-artifact@v4
       with:
