@@ -2,34 +2,38 @@ name: Build Flatpak Test
 
 on:
   push:
-    branches: ['main']  # Trigger on all branch pushes (including website commits)
-  pull_request:  # Trigger on pull requests
+    branches: ["main"] # Trigger on all branch pushes (including website commits)
+  pull_request: # Trigger on pull requests
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install Flatpak and dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y flatpak flatpak-builder
-        flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      - name: Install Flatpak and dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak flatpak-builder
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-    - name: Build Flatpak Darkly5.15-24.08
-      run: |
-       flatpak-builder --install-deps-from=flathub --repo=local-5.15-24.08 --force-clean .build-dir-5.15-24.08 org.kde.KStyle.Darkly5.15-24.08.json --user
+      - name: Build Flatpak Darkly5.15-24.08
+        run: |
+          flatpak-builder --install-deps-from=flathub --repo=local-5.15-24.08 --force-clean .build-dir-5.15-24.08 org.kde.KStyle.Darkly5.15-24.08.json --user
 
-    - name: Build Flatpak Darkly6.8
-      run: |
-       flatpak-builder --install-deps-from=flathub --repo=local-6.8 --force-clean .build-dir-6.8 org.kde.KStyle.Darkly6.8.json --user
+      - name: Build Flatpak Darkly5.15-25.08
+        run: |
+          flatpak-builder --install-deps-from=flathub --repo=local-5.15-25.08 --force-clean .build-dir-5.15-25.08 org.kde.KStyle.Darkly5.15-25.08.json --user
 
-    - name: Build Flatpak Darkly6.9
-      run: |
-       flatpak-builder --install-deps-from=flathub --repo=local-6.9 --force-clean .build-dir-6.9 org.kde.KStyle.Darkly6.9.json --user
+      - name: Build Flatpak Darkly6.8
+        run: |
+          flatpak-builder --install-deps-from=flathub --repo=local-6.8 --force-clean .build-dir-6.8 org.kde.KStyle.Darkly6.8.json --user
 
-    - name: Build Flatpak Darkly6.10
-      run: |
-       flatpak-builder --install-deps-from=flathub --repo=local-6.10 --force-clean .build-dir-6.10 org.kde.KStyle.Darkly6.10.json --user
+      - name: Build Flatpak Darkly6.9
+        run: |
+          flatpak-builder --install-deps-from=flathub --repo=local-6.9 --force-clean .build-dir-6.9 org.kde.KStyle.Darkly6.9.json --user
+
+      - name: Build Flatpak Darkly6.10
+        run: |
+          flatpak-builder --install-deps-from=flathub --repo=local-6.10 --force-clean .build-dir-6.10 org.kde.KStyle.Darkly6.10.json --user
